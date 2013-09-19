@@ -90,7 +90,7 @@ namespace francismeyvis
 
 		private static void Oef3_563 ()
 		{
-			Console.Write ("Geef 2 getallen voor ter vergelijking. het eerste getal: ");
+			Console.Write ("Geef 2 getallen om te vergelijking. Het eerste getal: ");
 			Double g1;
 			g1 = Convert.ToDouble (Console.ReadLine ());
 			Console.Write ("Het tweede getal: ");
@@ -116,7 +116,7 @@ namespace francismeyvis
 
 			Console.Write ("Geeft een character dat moet ge-escaped worden in HTML: ");
 			char c;
-			c = Convert.ToChar(Console.Read());
+			c = Convert.ToChar (Console.Read ());
 			Console.WriteLine ();
 
 			string escaped_value;
@@ -142,12 +142,13 @@ namespace francismeyvis
 				break;
 			default:
 				escaped_value = "";
-				Console.WriteLine ("Dumbass!");
 				break;
 			}
 
 			if ("" != escaped_value) {
 				Console.WriteLine ("De escape replacement is: '" + escaped_value + "'.");
+			} else {
+				Console.WriteLine ("Dumbass!");
 			}
 		}
 
@@ -166,7 +167,7 @@ namespace francismeyvis
 			const double maxCalorien = 500; // depends on age, length, activity I guess
 			const double calorieMarge = 10;
 
-			Console.WriteLine ("Nadat je ingeeft wat je vandaag at, krijg je dieet suggesties.");
+			Console.WriteLine ("Nadat je ingeeft wat je vandaag at, krijg je een dieet suggesties.");
 
 			Console.Write ("Hoeveel kilo hamburger: ");
 			double hamburgerGewicht;
@@ -250,6 +251,8 @@ namespace francismeyvis
 
 		public static void Main (string[] args)
 		{
+			// Uncomment all method calls to run all exercises
+
 			//Oef1_391();
 			//Oef2_392();
 			//Oef3_393();
