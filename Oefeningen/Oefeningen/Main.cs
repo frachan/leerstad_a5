@@ -241,11 +241,16 @@ namespace francismeyvis
 			if (0 > getal) {
 				Console.WriteLine ("Paljaske! Speel de plezante op een ander.");
 			} else {
-				long faculteit = 1;
-				for (int i=2; i<=getal; i++) {
-					faculteit *= i;
+				long resultaat = 1;
+				string berekening = "";
+				for (int i=getal; i>1; i--) {
+					resultaat *= i;
+					berekening += i + " * ";
 				}
-				Console.WriteLine ("De faculteit van " + getal + "! is " + faculteit + ".");
+				if ( 1 < getal ) {
+					berekening += "1 = ";
+				}
+				Console.WriteLine ("De faculteit van " + getal + " = " + berekening + resultaat + ".");
 			}
 		}
 
