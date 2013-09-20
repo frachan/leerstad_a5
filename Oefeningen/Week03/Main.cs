@@ -20,8 +20,7 @@ namespace Week03
 					}
 					minStr += min + "m";
 
-					int sec;
-					for (sec = 0; sec<60; sec++) {
+					for (int sec = 0; sec<60; sec++) {
 						string secStr = minStr;
 						if (10 > sec) {
 							secStr += "0";
@@ -67,7 +66,7 @@ namespace Week03
 						Console.WriteLine (output);
 					}
 				} else {
-					Console.WriteLine ("Only positive values are accepted!");
+					Console.WriteLine ("Enkel positieve waarden!");
 				}
 			} while ( 0 != input );
 		}
