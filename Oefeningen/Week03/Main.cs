@@ -75,17 +75,43 @@ namespace Week03
 		static void Oef6_666 ()
 		{
 			int total = 0;
-			while ( true ) {
-				int input;
-				input = Convert.ToInt32 (Console.ReadLine ());
+			int input = 1;
+			while ( 0 != input ) {
+				input = Convert.ToInt32 (Console.ReadLine ()); 
 				if ( 0 != input ) {
 					total += input;
 					Console.WriteLine ("+");
-				} else {
-					Console.WriteLine ("=\n" + total);
-					break; // possibly classified as Harken!
 				}
 			}
+			Console.WriteLine ("=\n" + total);
+		}
+
+
+		static void Oef7_667 ()
+		{
+			int input;
+			int total;
+			total = input = Convert.ToInt32 (Console.ReadLine ());
+			char oper;
+			do {
+				// Ask why I cannot use Console.Read(), it makes fail reading for next input.
+				oper = Console.ReadLine ()[0];
+				if ( '=' != oper ) {
+					input = Convert.ToInt32 (Console.ReadLine ());
+					switch ( oper ) {
+					case '+':
+						total += input;
+						break;
+					case '-':
+						total -= input;
+						break;
+					default:
+						Console.WriteLine ("Wrong operator");
+						break;
+					}
+				}
+			} while ( '=' != oper );
+			Console.WriteLine (total);
 		}
 
 
@@ -93,7 +119,8 @@ namespace Week03
 		{
 			//Oef4_664();
 			//Oef5_665();
-			Oef6_666();
+			//Oef6_666();
+			//Oef7_667();
 		}
 	}
 }
