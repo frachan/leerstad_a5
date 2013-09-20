@@ -72,10 +72,28 @@ namespace Week03
 		}
 
 
+		static void Oef6_666 ()
+		{
+			int total = 0;
+			while ( true ) {
+				int input;
+				input = Convert.ToInt32 (Console.ReadLine ());
+				if ( 0 != input ) {
+					total += input;
+					Console.WriteLine ("+");
+				} else {
+					Console.WriteLine ("=\n" + total);
+					break; // possibly classified as Harken!
+				}
+			}
+		}
+
+
 		public static void Main (string[] args)
 		{
-			Oef4_664();
-			Oef5_665();
+			//Oef4_664();
+			//Oef5_665();
+			Oef6_666();
 		}
 	}
 }
