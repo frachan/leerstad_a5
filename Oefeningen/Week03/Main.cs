@@ -119,7 +119,7 @@ namespace Week03
 		{
 			Console.Write ("Will convert your number to octals: ");
 			int input = Convert.ToInt32 (Console.ReadLine ());
-			Console.WriteLine (Convert.ToString(input, 8));
+			Console.WriteLine (Convert.ToString(input, 8) + 'o');
 		}
 
 
@@ -127,7 +127,7 @@ namespace Week03
 		{
 			Console.Write ("Will convert your number to hexadecimal: ");
 			int input = Convert.ToInt32 (Console.ReadLine ());
-			Console.WriteLine (Convert.ToString(input, 16));
+			Console.WriteLine (Convert.ToString(input, 16) + 'h');
 		}
 
 
@@ -135,7 +135,7 @@ namespace Week03
 		{
 			Console.Write ("Will convert your number to binary: ");
 			int input = Convert.ToInt32 (Console.ReadLine ());
-			Console.WriteLine (Convert.ToString(input, 2));
+			Console.WriteLine (Convert.ToString(input, 2) + 'b');
 		}
 
 
