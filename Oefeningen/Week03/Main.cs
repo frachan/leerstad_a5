@@ -139,15 +139,33 @@ namespace Week03
 		}
 
 
+		static void Oef11_6611 ()
+		{
+			Console.Write ("Enter a sentence to have all capitals converted to smallcaps: ");
+			string sentence = Console.ReadLine ();
+			string output = "";
+			for (int i=0; i<sentence.Length; i++) {
+				char c;
+				c = sentence[i];
+				if ( 'A' <= c && 'Z' >= c ) {
+					c = Convert.ToChar ('a' - 'A' + c);
+				}
+				output += c;
+			}
+			Console.WriteLine (output);
+		}
+
+
 		public static void Main (string[] args)
 		{
 			//Oef4_664();
 			//Oef5_665();
 			//Oef6_666();
 			//Oef7_667();
-			Oef8_668();
-			Oef9_669();
-			Oef10_6610();
+			//Oef8_668();
+			//Oef9_669();
+			//Oef10_6610();
+			Oef11_6611();
 		}
 	}
 }
