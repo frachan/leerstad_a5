@@ -156,6 +156,23 @@ namespace Week03
 		}
 
 
+		static void Oef12_6612 ()
+		{
+			Console.Write ("Enter a sentence to have all space replaced with an underscore: ");
+			string sentence = Console.ReadLine ();
+			string output = "";
+			for (int i=0; i<sentence.Length; i++) {
+				char c;
+				c = sentence[i];
+				if ( ' ' == c ) {
+					c = '_';
+				}
+				output += c;
+			}
+			Console.WriteLine (output);
+		}
+
+
 		public static void Main (string[] args)
 		{
 			//Oef4_664();
@@ -165,7 +182,8 @@ namespace Week03
 			//Oef8_668();
 			//Oef9_669();
 			//Oef10_6610();
-			Oef11_6611();
+			//Oef11_6611();
+			Oef12_6612();
 		}
 	}
 }
