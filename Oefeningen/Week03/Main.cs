@@ -115,12 +115,39 @@ namespace Week03
 		}
 
 
+		static void Oef8_668 ()
+		{
+			Console.Write ("Will convert your number to octals: ");
+			int input = Convert.ToInt32 (Console.ReadLine ());
+			Console.WriteLine (Convert.ToString(input, 8));
+		}
+
+
+		static void Oef9_669 ()
+		{
+			Console.Write ("Will convert your number to hexadecimal: ");
+			int input = Convert.ToInt32 (Console.ReadLine ());
+			Console.WriteLine (Convert.ToString(input, 16));
+		}
+
+
+		static void Oef10_6610 ()
+		{
+			Console.Write ("Will convert your number to binary: ");
+			int input = Convert.ToInt32 (Console.ReadLine ());
+			Console.WriteLine (Convert.ToString(input, 2));
+		}
+
+
 		public static void Main (string[] args)
 		{
 			//Oef4_664();
 			//Oef5_665();
 			//Oef6_666();
 			//Oef7_667();
+			Oef8_668();
+			Oef9_669();
+			Oef10_6610();
 		}
 	}
 }
