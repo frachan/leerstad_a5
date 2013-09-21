@@ -175,18 +175,24 @@ namespace Week03
 
 		static void Oef13_6613 ()
 		{
+			// This implementation does not consider proper word-bounderies
 			Console.WriteLine ("Enter a sentence, next a search term in the sentence:");
 			string sentence = Console.ReadLine ();
 			string pattern = Console.ReadLine ();
 			int matchCnt = 0;
-			for (int i=0; i<=sentence.Length - pattern.Length; i++) {
-				int j = 0;
-				while ((j < pattern.Length) && (sentence[i+j] == pattern[j])) {
-					j++;
-				}
-				if ((0 != pattern.Length) && (j == pattern.Length)) {
-					matchCnt++;
-					i += pattern.Length - 1; // prevent matching an already matched pattern again
+			if (0 != pattern.Length) {
+				int i = 0;
+				while (i <= (sentence.Length - pattern.Length)) {
+					int j = 0;
+					while ((j < pattern.Length) && (sentence[i+j] == pattern[j])) {
+						j++;
+					}
+					if ( j == pattern.Length ) {
+						matchCnt++;
+						i += pattern.Length;
+					} else {
+						i++;
+					}
 				}
 			}
 			string message = "The ";
@@ -218,7 +224,6 @@ namespace Week03
 			//Oef11_6611();
 			//Oef12_6612();
 			Oef13_6613();
-			//Oef14_6614();
 		}
 	}
 }
