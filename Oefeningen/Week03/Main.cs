@@ -214,6 +214,7 @@ namespace Week03
 
 		public static void Oef1_711()
 		{
+			Console.WriteLine ("Enter numbers. The code stops and outputs the largest number when a negative value is entered.");
 			int input = Convert.ToInt32( Console.ReadLine ());
 			int largestNumber = input;
 			while ( 0 <= input ) {
@@ -223,6 +224,24 @@ namespace Week03
 				}
 			}
 			Console.WriteLine ("The largest number is: " + largestNumber + ".");
+		}
+
+
+		public static void Oef2_712 ()
+		{
+			Console.WriteLine ("Enter 2 boundary numbers. The program outputs all numbers between (excluding) the 2 bouderies.");
+			int bound1 = Convert.ToInt32 (Console.ReadLine ());
+			int bound2 = Convert.ToInt32 (Console.ReadLine ());
+
+			int loop = bound1;
+			int end = bound2;
+			if (bound1 > bound2) {
+				loop = bound2 ;
+				end = bound1;
+			}
+			for (loop += 1; loop < end; loop++) {
+				Console.WriteLine ("" + loop);
+			}
 		}
 
 
@@ -239,7 +258,8 @@ namespace Week03
 			//Oef12_6612();
 			//Oef13_6613();
 
-			Oef1_711();
+			//Oef1_711();
+			Oef2_712();
 		}
 	}
 }
