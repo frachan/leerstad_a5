@@ -212,6 +212,20 @@ namespace Week03
 		}
 
 
+		public static void Oef1_711()
+		{
+			int input = Convert.ToInt32( Console.ReadLine ());
+			int largestNumber = input;
+			while ( 0 <= input ) {
+				input = Convert.ToInt32( Console.ReadLine ());
+				if ( input > largestNumber ) {
+					largestNumber = input;
+				}
+			}
+			Console.WriteLine ("The largest number is: " + largestNumber + ".");
+		}
+
+
 		public static void Main (string[] args)
 		{
 			//Oef4_664();
@@ -223,7 +237,9 @@ namespace Week03
 			//Oef10_6610();
 			//Oef11_6611();
 			//Oef12_6612();
-			Oef13_6613();
+			//Oef13_6613();
+
+			Oef1_711();
 		}
 	}
 }
