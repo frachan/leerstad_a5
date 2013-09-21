@@ -141,7 +141,7 @@ namespace Week03
 
 		static void Oef11_6611 ()
 		{
-			Console.Write ("Enter a sentence to have all capitals converted to smallcaps: ");
+			Console.WriteLine ("Enter a sentence to have all capitals converted to smallcaps:");
 			string sentence = Console.ReadLine ();
 			string output = "";
 			for (int i=0; i<sentence.Length; i++) {
@@ -158,7 +158,7 @@ namespace Week03
 
 		static void Oef12_6612 ()
 		{
-			Console.Write ("Enter a sentence to have all space replaced with an underscore: ");
+			Console.WriteLine ("Enter a sentence to have all space replaced with an underscore:");
 			string sentence = Console.ReadLine ();
 			string output = "";
 			for (int i=0; i<sentence.Length; i++) {
@@ -173,6 +173,39 @@ namespace Week03
 		}
 
 
+		static void Oef13_6613 ()
+		{
+			Console.WriteLine ("Enter a sentence, next a search term in the sentence:");
+			string sentence = Console.ReadLine ();
+			string pattern = Console.ReadLine ();
+			int matchCnt = 0;
+			for (int i=0; i<=sentence.Length - pattern.Length; i++) {
+				int j = 0;
+				while ((j < pattern.Length) && (sentence[i+j] == pattern[j])) {
+					j++;
+				}
+				if ((0 != pattern.Length) && (j == pattern.Length)) {
+					matchCnt++;
+					i += pattern.Length - 1; // prevent matching an already matched pattern again
+				}
+			}
+			string message = "The ";
+			message += (0 == pattern.Length) ? "empty search term " : "search term '" + pattern + "' ";
+			switch (matchCnt) {
+			case 0:
+				message += "did not occur.";
+				break;
+			case 1:
+				message += "occurred once.";
+				break;
+			default:
+				message += "occurred " + matchCnt + " times.";
+				break;
+			}
+			Console.WriteLine (message);
+		}
+
+
 		public static void Main (string[] args)
 		{
 			//Oef4_664();
@@ -183,7 +216,9 @@ namespace Week03
 			//Oef9_669();
 			//Oef10_6610();
 			//Oef11_6611();
-			Oef12_6612();
+			//Oef12_6612();
+			Oef13_6613();
+			//Oef14_6614();
 		}
 	}
 }
