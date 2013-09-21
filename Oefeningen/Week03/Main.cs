@@ -230,7 +230,9 @@ namespace Week03
 		public static void Oef2_712 ()
 		{
 			Console.WriteLine ("Enter 2 boundary numbers. The program outputs all numbers between (excluding) the 2 bouderies.");
+			Console.Write ("First boundary number: ");
 			int bound1 = Convert.ToInt32 (Console.ReadLine ());
+			Console.Write ("Second boundary number: ");
 			int bound2 = Convert.ToInt32 (Console.ReadLine ());
 
 			int loop = bound1;
@@ -241,6 +243,27 @@ namespace Week03
 			}
 			for (loop += 1; loop < end; loop++) {
 				Console.WriteLine ("" + loop);
+			}
+		}
+
+
+		public static void Oef3_713 ()
+		{
+			Console.Write ("Enter a number larger than zero: ");
+			int input = Convert.ToInt32 (Console.ReadLine ());
+
+			if (0 < input) {
+				int value = input;
+				while (1 != value) {
+					if (0 == value % 2) {
+						value /= 2;
+					} else {
+						value = value * 3 + 1;
+					}
+					Console.WriteLine ("" + value);
+				}
+			} else {
+				Console.WriteLine ("Ouch! You cannot read ...");
 			}
 		}
 
@@ -259,7 +282,8 @@ namespace Week03
 			//Oef13_6613();
 
 			//Oef1_711();
-			Oef2_712();
+			//Oef2_712();
+			Oef3_713();
 		}
 	}
 }
