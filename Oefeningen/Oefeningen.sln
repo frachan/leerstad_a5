@@ -5,6 +5,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Week02", "Oefeningen\Week02
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Week03", "Week03\Week03.csproj", "{6E201350-273D-4A5E-86BB-60C8162EE0AA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Week04", "Week04\Week04\Week04.csproj", "{F07ECB96-914A-4BF0-8B94-5C35E91189ED}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", "{A63DA72C-2049-48D3-A14B-4CCFE3C9FC89}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -19,8 +23,16 @@ Global
 		{6E201350-273D-4A5E-86BB-60C8162EE0AA}.Debug|x86.Build.0 = Debug|x86
 		{6E201350-273D-4A5E-86BB-60C8162EE0AA}.Release|x86.ActiveCfg = Release|x86
 		{6E201350-273D-4A5E-86BB-60C8162EE0AA}.Release|x86.Build.0 = Release|x86
+		{A63DA72C-2049-48D3-A14B-4CCFE3C9FC89}.Debug|x86.ActiveCfg = Debug|x86
+		{A63DA72C-2049-48D3-A14B-4CCFE3C9FC89}.Debug|x86.Build.0 = Debug|x86
+		{A63DA72C-2049-48D3-A14B-4CCFE3C9FC89}.Release|x86.ActiveCfg = Release|x86
+		{A63DA72C-2049-48D3-A14B-4CCFE3C9FC89}.Release|x86.Build.0 = Release|x86
+		{F07ECB96-914A-4BF0-8B94-5C35E91189ED}.Debug|x86.ActiveCfg = Debug|x86
+		{F07ECB96-914A-4BF0-8B94-5C35E91189ED}.Debug|x86.Build.0 = Debug|x86
+		{F07ECB96-914A-4BF0-8B94-5C35E91189ED}.Release|x86.ActiveCfg = Release|x86
+		{F07ECB96-914A-4BF0-8B94-5C35E91189ED}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = Week03\Week03.csproj
+		StartupItem = Week04\Week04\Week04.csproj
 	EndGlobalSection
 EndGlobal
