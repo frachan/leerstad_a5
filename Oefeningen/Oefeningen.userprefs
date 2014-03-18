@@ -1,9 +1,8 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Oef_20140204/Program.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Release|x86" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="beurs/Program.cs">
     <Files>
-      <File FileName="Oef_20140204/Program.cs" Line="122" Column="50" />
-      <File FileName="../../opdrachten/extra_oef01_oef06/Program.cs" Line="72" Column="1" />
+      <File FileName="beurs/Program.cs" Line="90" Column="12" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
