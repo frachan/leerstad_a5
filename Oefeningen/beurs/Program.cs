@@ -24,6 +24,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
+
 namespace beurs_francismeyvis
 {
     /// Instantie die de koers evolution op een bepaalde dag bijhoudt
