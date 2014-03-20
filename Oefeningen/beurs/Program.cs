@@ -468,8 +468,6 @@ namespace beurs_francismeyvis
 
             Console.WriteLine(aandeel1 == beurs1.GetSterksteDagStijger(d4));
             Console.WriteLine(aandeel2 == beurs1.GetSterksteDagDaler(d4));
-
-            Console.ReadLine();
 		}
 	}
 }
