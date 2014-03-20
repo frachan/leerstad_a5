@@ -1,10 +1,32 @@
+/* Copyright 2014 Francis Meyvis*/
+
+/* 
+ * Implementatie van oefening 8
+ * 
+ * Heb de Koers instantie een DataTime gegeven uit luiheid
+ * Dit laat de gebruiker toe een Koers toe te voegen aan een KoersWijziging instatie met gaten.
+ * 
+ * Naast Koers zijn er nog de wrappers KoersWaarde & KoersVerschil die
+ * het mogelijk maken om het verschil en groei van een koers te bereken.
+ * KoersWaarde wordt gebruikt in Beurs<>.Overzicht() om "3" opeenvolgende koersverandering vast te stellen
+ * KoersVerschil wordt gebruikt voor het vinden van sterkste dalers & stijgers.
+ * 
+ * De implementatie maakt gebruik van faciliteiten die nog niet (volledig) gezien zijn
+ * - cast operator (in KoersWaarde & KoersVerschil)
+ * - generics
+ * - Tuple<>
+ * - delegate
+ * - yield
+ * - double? (nullable)
+ */
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace beurs
+namespace beurs_francismeyvis
 {
-
+    /// Instantie die de koers evolution op een bepaalde dag bijhoudt
 	class Koers : IComparable<Koers> {
 		public readonly double OpenWaarde;
 		public readonly double SluitWaarde;
@@ -17,7 +39,7 @@ namespace beurs
 			Dag = dag;
 		}
 
-		/// Vergelijk a.d.h.v. de absolute waarde (het gemiddelde van de openings- en sluitingswaarde)
+		/// Vergelijk a.d.h.v. de dag, laat toe Koers te sorteren op basis van tijd
 		public int CompareTo(Koers that) {
 			return this.Dag.CompareTo(that.Dag);
 		}
@@ -25,14 +47,14 @@ namespace beurs
 		public override string ToString() {
 			return Dag.ToString ("yyyyMMdd:") + OpenWaarde + "," + SluitWaarde;
 		}
-	}
+	} // class Koers
 
 
-	// Om Koers instanties te vergelijken op basis van hun absolute gemiddelde waarde
+	/// Om Koers instanties te vergelijken op basis van hun gemiddelde waarde
 	class KoersWaarde : IComparable<KoersWaarde> {
 		readonly Koers _Koers;
 
-		/// Vergelijk a.d.h.v. gemiddelde van open & sluit waarde
+		/// Vergelijk a.d.h.v. het gemiddelde van de open & sluit waarde
 		public int CompareTo(KoersWaarde that) {
 			return ((double)this).CompareTo((double)that);
 		}
@@ -42,45 +64,47 @@ namespace beurs
 			_Koers = koers;
 		}
 
-		/// Converteer een KoersWaarde instance naar een double
+		/// Converteer een KoersWaarde instance naar zijn gemiddelde in een double
 		public static implicit operator double(KoersWaarde verschil) {
 			return (verschil._Koers.SluitWaarde + verschil._Koers.OpenWaarde) / 2;
 		}
-	}
+	} // class KoersWaarde
 
 
-	// Om Koers instanties te vergelijken op basis van hun groei van hun open en sluit waarde
+	/// Om Koers instanties te vergelijken op basis van hun groei van hun open en sluit waarde
 	class KoersVerschil : IComparable<KoersVerschil> {
 		public readonly Koers Koers;
 
-		/// Vergelijk a.d.h.v. procentuele groei
+		/// Vergelijk a.d.h.v. de groei van de open & sluit waarde (kan negatief zijn)
 		public int CompareTo(KoersVerschil that) {
 			return ((double)this).CompareTo((double)that);
 		}
 
-		/// Maak een KoersProcVerschil instantie
+		/// Maak een KoersVerschil instantie
 		public KoersVerschil(Koers koers) {
 			Koers = koers;
 		}
 
-		/// Converteer het KoersProcVerschil instance naar een double
+		/// Converteer het KoersVerschil instance naar groei waarde in een double
 		public static implicit operator double(KoersVerschil KoersProcVerschil) {
 			return (KoersProcVerschil.Koers.SluitWaarde - KoersProcVerschil.Koers.OpenWaarde) / 2 +
 				Math.Min(KoersProcVerschil.Koers.SluitWaarde, KoersProcVerschil.Koers.OpenWaarde);
 		}
-	}
+	} // class KoersVerschil
 
 
+    /// De interface uit de opgave
 	interface IKoers {
 		void VoegToe(Koers koers); 
 	}
 
 
+    /// Instantie die dagwaarden bijhoudt van een bepaald aandeel of obligatie
 	class KoersWijziging : IKoers, IComparable<KoersWijziging>, IEnumerable<Koers> {
 		private Koers[] _Koersen = new Koers[0];
 		public readonly string Naam;
 
-		/// Voeg een Koers instantie toe, enkel dat nog niet is gebeurt
+		/// Voeg een _nieuwe_ Koers instantie toe (negeer als het reeds bestaat)
 		public void VoegToe(Koers koers) {
 			if (!BevatKoersDag(koers.Dag)) {
 				Array.Resize(ref _Koersen, _Koersen.Length + 1);
@@ -94,18 +118,19 @@ namespace beurs
 			return Naam.CompareTo(koersWijziging.Naam);
 		}
 
-		/// Geeft een iterator over alle Koers instanties
-		IEnumerator IEnumerable.GetEnumerator() {
-			return this.GetEnumerator();
-		}		
+		/// Geeft een iterator om over alle Koers instanties
 		public IEnumerator<Koers> GetEnumerator() {
-			return _Koersen.GetEnumerator ();
+            return ((IEnumerable<Koers>)this._Koersen).GetEnumerator();
 		}
+        IEnumerator IEnumerable.GetEnumerator() {
+            return this.GetEnumerator();
+        }		
 
-		/// Geeft een iterator over alle Koers instanties
-		public System.Collections.IEnumerator GetEnumerator(DateTime startDag, int aantalDagen) {
+		/// Geeft een iterator over alle Koers instanties voor de gegeven duur op het gegeven moment
+		public IEnumerator<Koers> GetEnumerator(DateTime startDag, int aantalDagen) {
 			int index = Array.BinarySearch(_Koersen, new Koers(0, 0, startDag));
 			if ((0 <= index) && (index + aantalDagen <= _Koersen.Length)) {
+                // Geeft enkel de iterator indien de gegeven dag en de length bestaat!
 				for (int i = index; i < index + aantalDagen; ++i) {
 					yield return _Koersen[i];
 				}
@@ -121,11 +146,7 @@ namespace beurs
 		public Koers this [DateTime dag] {
 			get {
 				int index = Array.BinarySearch(_Koersen, new Koers(0, 0, dag));
-				if (0 <= index) {
-					return _Koersen [index];
-				} else {
-					return null;
-				}
+				return (0 <= index) ? _Koersen [index] : null;
 			}
 		}
 
@@ -133,7 +154,6 @@ namespace beurs
 		public bool BevatKoersDag(DateTime dag) {
 			return 0 <= Array.BinarySearch(_Koersen, new Koers(0, 0, dag));
 		}
-
 	} // class KoersWijziging
 
 
@@ -147,16 +167,19 @@ namespace beurs
 	} // class Obligatie
 
 
-	class Beurs<T> : IEnumerable 
+	class Beurs<T> : IEnumerable<KoersWijziging>
 	                 where T : KoersWijziging 
 	{
-		const int SIGNAAL_TELLER = 3;
-		const int WEEK_TELLER    = 5;
-		const string VERKOOP_STR = " V!";
-		const string AANKOOP_STR = " A!";
+        private delegate bool Vergelijk(double a, double b); ///< function pointer
+        private const int WEEK_TELLER = 5;
+        private const int SIGNAAL_TELLER = 3;
+        private const string VERKOOP_STR = " V!";
+        private const string AANKOOP_STR = " A!";
 
+        /// Aandelen & obligaties in dit beurs object
 		private KoersWijziging[] _KoersWijziging = new KoersWijziging[0];
 
+        /// Voeg een _nieuw_ aandeel of obligatie toe aan dit beurs object
 		public void VoegToe(KoersWijziging koersenWijziging) {
 			if (0 > Array.BinarySearch (_KoersWijziging, koersenWijziging)) {
 				// Enkel toevoegen indien het aandeel nog niet aanwezig is
@@ -166,86 +189,90 @@ namespace beurs
 			}
 		}
 
-		public IEnumerator GetEnumerator() {
-			return _KoersWijziging.GetEnumerator ();
+        /// Implementatie van IEnumerable voor support van foreach(Beurs)
+		public IEnumerator<KoersWijziging> GetEnumerator() {
+            return ((IEnumerable<KoersWijziging>)this._KoersWijziging).GetEnumerator();
+		}
+        IEnumerator IEnumerable.GetEnumerator() {
+            return this.GetEnumerator();
+        }
+
+        /// Geef de cumulatie van de verschillen van KoersWijziging instanties over een bepaalde periode
+        private double?[] GetVerschillen(DateTime dag, int aantalDagen = 1) {
+            double?[] verschillen = new double?[_KoersWijziging.Length];
+            int index = 0;
+            foreach (KoersWijziging kw in _KoersWijziging) {
+                double? verschil = null;
+                IEnumerator<Koers> enumerator = kw.GetEnumerator(dag, aantalDagen);
+                while (enumerator.MoveNext()) {
+                    if (!verschil.HasValue) {
+                        verschil = 0.0;
+                    }
+                    verschil += new KoersVerschil(enumerator.Current);
+                    //Console.WriteLine ("index=" + index + ": " + enumerator.Current + ": " + "verschil=" + (double)new KoersVerschil (enumerator.Current) + " verschilTotal=" + verschil);
+                }
+                verschillen[index++] = verschil;
+            }
+            return verschillen;
+        }
+
+        /// Geef zowel de index als extreme waarde terug in de gegeven array, gegeven de vergelijkings methode
+        private Tuple<int, double?> ZoekExtreem(double?[] array, Vergelijk vergelijk) {
+            double? extreem = null;
+            int index = -1;
+            for (int i = 0; i < array.Length; ++i) {
+                if (array[i].HasValue) {
+                    if (!extreem.HasValue || vergelijk(array[i].Value, extreem.Value)) {
+                        extreem = array[i];
+                        index = i;
+                    }
+                }
+            }
+            return new Tuple<int, double?>(index, extreem);
+        }
+                
+        /// Zoek de koerswijziging die het sterkst stijgt op de gegeven dag
+        public KoersWijziging GetSterksteDagStijger(DateTime dag) {
+            double?[] verschillen = GetVerschillen(dag);
+            Tuple<int, double?> result = ZoekExtreem(verschillen, delegate(double a, double b) { return a > b; });
+            return (result.Item2.HasValue) ? _KoersWijziging[result.Item1] : null;
 		}
 
-		private KoersVerschil[] GetVerschillen(DateTime dag, ref int validIndex) {
-			KoersVerschil[] verschillen = new KoersVerschil[_KoersWijziging.Length];
-			int teller = 0;
-			validIndex = verschillen.Length;
-			foreach (KoersWijziging kw in _KoersWijziging) {
-				if (kw.BevatKoersDag(dag)) {
-					if (verschillen.Length == validIndex) {
-						validIndex = teller;
-					}
-					verschillen[teller] = new KoersVerschil(kw [dag]);
-				}
-				teller++;
-			}
-			return verschillen;
-		}
+        /// Zoek de koerswijziging die het sterkst daalt op de gegeven dag
+        public KoersWijziging GetSterksteDagDaler(DateTime dag) {
+            double?[] verschillen = GetVerschillen(dag);
+            Tuple<int, double?> result = ZoekExtreem(verschillen, delegate(double a, double b) { return a < b; });
+            return (result.Item2.HasValue) ? _KoersWijziging[result.Item1] : null;
+        }
 
-		public KoersWijziging GetSterksteDagStijger(DateTime dag) {
-			KoersWijziging koersWijziging = null;
-			int index = 0;
-			KoersVerschil[] verschillen = GetVerschillen(dag, ref index);
-			Console.WriteLine (verschillen);
-			for (int i = index + 1; i < verschillen.Length; ++i) {
-				if ((null != verschillen[i]) && (1 == verschillen[i].CompareTo(verschillen[index]))) {
-					index = i;
-					koersWijziging = _KoersWijziging [index];
-				}
-			}
-			return koersWijziging;
-		}
-
-		// Zoek de koerswijziging die het sterkst steeg over 5 dagen vanaf de gegeven dag
+        /// Zoek de koerswijziging die het sterkst stijgt over 5 dagen vanaf de gegeven dag
 		public KoersWijziging GetSterksteWeekStijger(DateTime dag) {
-			KoersWijziging koersWijziging = null;
-
-			double?[] verschillen = new double?[_KoersWijziging.Length];
-		    int index = 0;
-			foreach (KoersWijziging kw in _KoersWijziging) {
-				bool heeftVerschil = false;
-				double verschil = 0.0;
-				var enumerator = kw.GetEnumerator (dag, WEEK_TELLER);
-				while (enumerator.MoveNext()) {
-					heeftVerschil = true;
-					verschil += new KoersVerschil ((Koers)enumerator.Current);
-					Console.WriteLine ("index=" + index + ": " + enumerator.Current + ": " + 
-					                   "verschil=" + (double)new KoersVerschil ((Koers)enumerator.Current) + 
-					                   " verschilTotal=" + verschil);
-				}
-				if (heeftVerschil) {
-					verschillen [index] = verschil;
-				}
-				++index;
-			}
-			index = 0;
-			foreach(double? d in verschillen) {
-				if (d.HasValue) {
-					Console.WriteLine ("index=" + index + ": " + d);
-				}
-				++index;
-			}
-			return koersWijziging;
+            double?[] verschillen = GetVerschillen(dag, WEEK_TELLER);
+            Tuple<int, double?> result = ZoekExtreem(verschillen, delegate(double a, double b) { return a > b; });
+            return (result.Item2.HasValue) ? _KoersWijziging[result.Item1] : null;
 		}
 
-		// Overzicht van alle aandelen, inclusief aankoop/verkoop signalen
-		public void Display() {
+        /// Zoek de koerswijziging die het sterkst daalt over 5 dagen vanaf de gegeven dag
+        public KoersWijziging GetSterksteWeekDaler(DateTime dag) {
+            double?[] verschillen = GetVerschillen(dag, WEEK_TELLER);
+            Tuple<int, double?> result = ZoekExtreem(verschillen, delegate(double a, double b) { return a < b; });
+            return (result.Item2.HasValue) ? _KoersWijziging[result.Item1] : null;
+        }
+
+		/// Geeft een overzicht van alles in beurs, inclusief aankoop/verkoop signalen
+		public void Overzicht() {
 			foreach (KoersWijziging kw in _KoersWijziging) {
-				int verkoopTeller;
-				int aankoopTeller;
-				verkoopTeller = aankoopTeller = 0;
-				Console.Write (kw.GetType() + ": " + kw.Naam + "\n");
+				int verkoopTeller = 0, aankoopTeller = 0;
 				KoersWaarde w = null;
-				foreach (Koers k in kw) {
-					Console.Write ("    " + k);
+
+                Console.WriteLine(kw.GetType() + ": " + kw.Naam);
+                foreach (Koers k in kw)
+                {
 					if (null == w) {
 						w = new KoersWaarde (k);
 					}
-					if (1 == w.CompareTo (new KoersWaarde (k))) { 
+                    Console.Write("    " + k);
+                    if (1 == w.CompareTo(new KoersWaarde(k))) { 
 						// koers daling
 						if (SIGNAAL_TELLER == aankoopTeller + 1) {
 							Console.Write (AANKOOP_STR);
@@ -266,13 +293,12 @@ namespace beurs
 						verkoopTeller = aankoopTeller = 0;
 					}
 					w = new KoersWaarde (k);
-					Console.Write ("\n");
+					Console.WriteLine ();
 				}
 				Console.WriteLine ();
 			}
 		}
 	} // class Beurs
-
 	
 
 	class MainClass
@@ -328,7 +354,7 @@ namespace beurs
 			koers1 = new Koers (10, 20, d1);
 			KoersVerschil kpv1 = new KoersVerschil (koers1);
 			// implicit conversion to double
-			Console.WriteLine(1.0 == kpv1);
+			Console.WriteLine(15.0 == kpv1);
 			KoersVerschil kpv2 = new KoersVerschil (koers1);
 			Console.WriteLine (0 == kpv1.CompareTo(kpv2));
 			kpv2 = new KoersVerschil (new Koers(10, 30, d1));
@@ -373,10 +399,10 @@ namespace beurs
 
 			Beurs<Aandeel> beurs1 = new Beurs<Aandeel> ();
 			// Heeft lege stijgers & dalers
-			//Console.WriteLine(null == beurs1.GetSterksteDagStijger (d1));
-			//			Console.WriteLine(null == beurs1.GetSterksteDagDaler (d1));
-			//			Console.WriteLine(null == beurs1.GetSterksteWeekStijger (d1));
-			//			Console.WriteLine(null == beurs1.GetSterksteWeekDaler (d1));
+			Console.WriteLine(null == beurs1.GetSterksteDagStijger (d1));
+			Console.WriteLine(null == beurs1.GetSterksteDagDaler (d1));
+			Console.WriteLine(null == beurs1.GetSterksteWeekStijger (d1));
+			Console.WriteLine(null == beurs1.GetSterksteWeekDaler (d1));
 
 			// Moet leeg zijn
 			teller = 0;
@@ -425,20 +451,24 @@ namespace beurs
 			aandeel2.VoegToe (new Koers (20,  0, d3));
 			aandeel2.VoegToe (new Koers (30, 20, d2));
 
-			beurs1.Display ();
+			beurs1.Overzicht ();
 
-			Console.WriteLine ("--------------");
-			beurs1.GetSterksteWeekStijger (d1);
+            // Slecht 1 geldig aandeel in beurs1: dat is zowel het sterkste als het zwakste
+			Console.WriteLine(aandeel1 == beurs1.GetSterksteWeekStijger (d1));
+            Console.WriteLine(aandeel1 == beurs1.GetSterksteWeekDaler(d1));
 
 			aandeel2.VoegToe (new Koers (40, 30, d1));
-			Console.WriteLine ("--------------");
-			beurs1.GetSterksteWeekStijger (d1);
+            Console.WriteLine(aandeel1 == beurs1.GetSterksteWeekStijger(d1));
+            Console.WriteLine(aandeel1 == beurs1.GetSterksteWeekDaler(d1));
 
 			aandeel2.VoegToe (new Koers (-10, 60, d5));
-			Console.WriteLine ("--------------");
-			beurs1.GetSterksteWeekStijger (d1);
+            Console.WriteLine(aandeel1 == beurs1.GetSterksteWeekStijger(d1));
+            Console.WriteLine(aandeel2 == beurs1.GetSterksteWeekDaler(d1));
 
+            Console.WriteLine(aandeel1 == beurs1.GetSterksteDagStijger(d4));
+            Console.WriteLine(aandeel2 == beurs1.GetSterksteDagDaler(d4));
 
+            Console.ReadLine();
 		}
 	}
 }
