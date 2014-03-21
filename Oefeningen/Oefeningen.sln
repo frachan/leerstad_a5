@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Oef_20140204", "Oef_2014020
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "beurs", "beurs\beurs.csproj", "{FE328144-41E6-473D-BCED-457BD9F847D0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bib", "Bib\Bib.csproj", "{B4F2CF8B-6E34-45DA-8F1B-9C767D8DD6EA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -29,6 +31,10 @@ Global
 		{86D2CDF3-32EA-4E09-986B-956DBCF50D7A}.Debug|x86.Build.0 = Debug|x86
 		{86D2CDF3-32EA-4E09-986B-956DBCF50D7A}.Release|x86.ActiveCfg = Release|x86
 		{86D2CDF3-32EA-4E09-986B-956DBCF50D7A}.Release|x86.Build.0 = Release|x86
+		{B4F2CF8B-6E34-45DA-8F1B-9C767D8DD6EA}.Debug|x86.ActiveCfg = Debug|x86
+		{B4F2CF8B-6E34-45DA-8F1B-9C767D8DD6EA}.Debug|x86.Build.0 = Debug|x86
+		{B4F2CF8B-6E34-45DA-8F1B-9C767D8DD6EA}.Release|x86.ActiveCfg = Release|x86
+		{B4F2CF8B-6E34-45DA-8F1B-9C767D8DD6EA}.Release|x86.Build.0 = Release|x86
 		{F07ECB96-914A-4BF0-8B94-5C35E91189ED}.Debug|x86.ActiveCfg = Debug|x86
 		{F07ECB96-914A-4BF0-8B94-5C35E91189ED}.Debug|x86.Build.0 = Debug|x86
 		{F07ECB96-914A-4BF0-8B94-5C35E91189ED}.Release|x86.ActiveCfg = Release|x86
@@ -39,6 +45,6 @@ Global
 		{FE328144-41E6-473D-BCED-457BD9F847D0}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = beurs\beurs.csproj
+		StartupItem = Bib\Bib.csproj
 	EndGlobalSection
 EndGlobal
