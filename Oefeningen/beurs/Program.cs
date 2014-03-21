@@ -3,21 +3,23 @@
 /* 
  * Implementatie van oefening 8
  * 
- * Heb de Koers instantie een DataTime gegeven uit luiheid
- * Dit laat de gebruiker toe een Koers toe te voegen aan een KoersWijziging instatie met gaten.
- * 
  * Naast Koers zijn er nog de wrappers KoersWaarde & KoersVerschil die
  * het mogelijk maken om het verschil en groei van een koers te bereken.
  * KoersWaarde wordt gebruikt in Beurs<>.Overzicht() om "3" opeenvolgende koersverandering vast te stellen
  * KoersVerschil wordt gebruikt voor het vinden van sterkste dalers & stijgers.
  * 
- * De implementatie maakt gebruik van faciliteiten die nog niet (volledig) gezien zijn
- * - cast operator (in KoersWaarde & KoersVerschil)
- * - generics
- * - Tuple<>
- * - delegate
- * - yield
- * - double? (nullable)
+ * De implementatie maakt gebruik van enkele nieuwe faciliteiten
+ * - cast operator (in KoersWaarde & KoersVerschil), generics, Tuple<>, delegate, yield, nullable (double?)
+ * 
+ * Deze implementatie heeft een DateTime in de Koers instantie.
+ * Dat is implementatie gewijs eenvoudiger (sorteren & zoeken naar een bepaalde Koers in KoersWijziging)
+ * Maar kan lijden tot een KoersWijziging met "gaten"
+ * Vandaar ook het gebruik van de double? 
+ * Wanneer een bepaalde KoersWijziging geen Koers heeft i.v.m. een andere KoersWijziging.
+ * 
+ * Met de nieuwe kennis vergaart (na) deze oefening zou ik gebruik maken van 
+ * Array<Tuple<KoersWijziging, double>> om de sterkste daler/stijger te zoeken.
+ * Lijkt me properder en simpler dan de Array<double?> techniek ... sigh
  */
 
 using System;
@@ -27,6 +29,31 @@ using System.Collections.Generic;
 
 namespace beurs_francismeyvis
 {
+	/// Module met algemene helpers
+	namespace Util {
+
+		class Extreem<T> where T: struct /* nodig omdat T as nullable is gebruikt en de compiler daarop anders een penaltie geeft*/ {
+			/// function pointer
+			public delegate bool Vergelijk(T a, T b);
+
+			/// Geef zowel de index als extreme waarde terug in de gegeven array met nullables, gegeven de vergelijkings methode
+			public static Tuple<int, T?> Zoek(T?[] array, Vergelijk vergelijk) {
+				T? extreem = null;
+				int index = -1;
+				for (int i = 0; i < array.Length; ++i) {
+					if (array[i].HasValue) {
+						if (!extreem.HasValue || vergelijk(array[i].Value, extreem.Value)) {
+							extreem = array[i];
+							index = i;
+						}
+					}
+				}
+				return new Tuple<int, T?>(index, extreem);
+			}
+		} // class Extreem
+	} // ns Util
+
+
     /// Instantie die de koers evolution op een bepaalde dag bijhoudt
 	class Koers : IComparable<Koers> {
 		public readonly double OpenWaarde;
@@ -102,6 +129,10 @@ namespace beurs_francismeyvis
 
     /// Instantie die dagwaarden bijhoudt van een bepaald aandeel of obligatie
 	class KoersWijziging : IKoers, IComparable<KoersWijziging>, IEnumerable<Koers> {
+		private const int SIGNAAL_TELLER = 3;
+		private const string VERKOOP_STR = " V!";
+		private const string AANKOOP_STR = " A!";
+
 		private Koers[] _Koersen = new Koers[0];
 		public readonly string Naam;
 
@@ -155,6 +186,42 @@ namespace beurs_francismeyvis
 		public bool BevatKoersDag(DateTime dag) {
 			return 0 <= Array.BinarySearch(_Koersen, new Koers(0, 0, dag));
 		}
+
+		/// Geeft een overzicht van alles in de KoersWijziging, inclusief aankoop/verkoop signalen
+		public void Overzicht() {
+			int verkoopTeller = 0, aankoopTeller = 0;
+			KoersWaarde w = null;
+
+			Console.WriteLine(GetType() + ": " + Naam);
+			foreach (Koers k in this) {
+				if (null == w) {
+					w = new KoersWaarde (k);
+				}
+				Console.Write("    " + k);
+				if (1 == w.CompareTo(new KoersWaarde(k))) { 
+					// koers daling
+					if (SIGNAAL_TELLER == aankoopTeller + 1) {
+						Console.Write (AANKOOP_STR);
+					} else {
+						verkoopTeller = 0;
+						++aankoopTeller;
+					}
+				} else if (-1 == w.CompareTo (new KoersWaarde (k))) { 
+					// koers stijging
+					if (SIGNAAL_TELLER == verkoopTeller + 1) {
+						Console.Write (VERKOOP_STR);
+					} else {
+						aankoopTeller = 0;
+						++verkoopTeller;
+					}
+				} else {
+					// status quo (reset tellers)
+					verkoopTeller = aankoopTeller = 0;
+				}
+				w = new KoersWaarde (k);
+				Console.WriteLine ();
+			}
+		}
 	} // class KoersWijziging
 
 
@@ -171,11 +238,7 @@ namespace beurs_francismeyvis
 	class Beurs<T> : IEnumerable<KoersWijziging>
 	                 where T : KoersWijziging 
 	{
-        private delegate bool Vergelijk(double a, double b); ///< function pointer
         private const int WEEK_TELLER = 5;
-        private const int SIGNAAL_TELLER = 3;
-        private const string VERKOOP_STR = " V!";
-        private const string AANKOOP_STR = " A!";
 
         /// Aandelen & obligaties in dit beurs object
 		private KoersWijziging[] _KoersWijziging = new KoersWijziging[0];
@@ -217,85 +280,42 @@ namespace beurs_francismeyvis
             return verschillen;
         }
 
-        /// Geef zowel de index als extreme waarde terug in de gegeven array, gegeven de vergelijkings methode
-        private Tuple<int, double?> ZoekExtreem(double?[] array, Vergelijk vergelijk) {
-            double? extreem = null;
-            int index = -1;
-            for (int i = 0; i < array.Length; ++i) {
-                if (array[i].HasValue) {
-                    if (!extreem.HasValue || vergelijk(array[i].Value, extreem.Value)) {
-                        extreem = array[i];
-                        index = i;
-                    }
-                }
-            }
-            return new Tuple<int, double?>(index, extreem);
-        }
-                
         /// Zoek de koerswijziging die het sterkst stijgt op de gegeven dag
         public KoersWijziging GetSterksteDagStijger(DateTime dag) {
             double?[] verschillen = GetVerschillen(dag);
-            Tuple<int, double?> result = ZoekExtreem(verschillen, delegate(double a, double b) { return a > b; });
+			Tuple<int, double?> result = Util.Extreem<double>.Zoek(
+				verschillen, delegate(double a, double b) { return a > b; });
             return (result.Item2.HasValue) ? _KoersWijziging[result.Item1] : null;
 		}
 
         /// Zoek de koerswijziging die het sterkst daalt op de gegeven dag
         public KoersWijziging GetSterksteDagDaler(DateTime dag) {
             double?[] verschillen = GetVerschillen(dag);
-            Tuple<int, double?> result = ZoekExtreem(verschillen, delegate(double a, double b) { return a < b; });
+			Tuple<int, double?> result = Util.Extreem<double>.Zoek(
+				verschillen, delegate(double a, double b) { return a < b; });
             return (result.Item2.HasValue) ? _KoersWijziging[result.Item1] : null;
         }
 
         /// Zoek de koerswijziging die het sterkst stijgt over 5 dagen vanaf de gegeven dag
 		public KoersWijziging GetSterksteWeekStijger(DateTime dag) {
             double?[] verschillen = GetVerschillen(dag, WEEK_TELLER);
-            Tuple<int, double?> result = ZoekExtreem(verschillen, delegate(double a, double b) { return a > b; });
+			Tuple<int, double?> result = Util.Extreem<double>.Zoek(
+				verschillen, delegate(double a, double b) { return a > b; });
             return (result.Item2.HasValue) ? _KoersWijziging[result.Item1] : null;
 		}
 
         /// Zoek de koerswijziging die het sterkst daalt over 5 dagen vanaf de gegeven dag
         public KoersWijziging GetSterksteWeekDaler(DateTime dag) {
             double?[] verschillen = GetVerschillen(dag, WEEK_TELLER);
-            Tuple<int, double?> result = ZoekExtreem(verschillen, delegate(double a, double b) { return a < b; });
+			Tuple<int, double?> result = Util.Extreem<double>.Zoek(
+				verschillen, delegate(double a, double b) { return a < b; });
             return (result.Item2.HasValue) ? _KoersWijziging[result.Item1] : null;
         }
 
-		/// Geeft een overzicht van alles in beurs, inclusief aankoop/verkoop signalen
+		/// Geeft een overzicht van alles in Beurs, inclusief aankoop/verkoop signalen
 		public void Overzicht() {
 			foreach (KoersWijziging kw in _KoersWijziging) {
-				int verkoopTeller = 0, aankoopTeller = 0;
-				KoersWaarde w = null;
-
-                Console.WriteLine(kw.GetType() + ": " + kw.Naam);
-                foreach (Koers k in kw)
-                {
-					if (null == w) {
-						w = new KoersWaarde (k);
-					}
-                    Console.Write("    " + k);
-                    if (1 == w.CompareTo(new KoersWaarde(k))) { 
-						// koers daling
-						if (SIGNAAL_TELLER == aankoopTeller + 1) {
-							Console.Write (AANKOOP_STR);
-						} else {
-							verkoopTeller = 0;
-							++aankoopTeller;
-						}
-					} else if (-1 == w.CompareTo (new KoersWaarde (k))) { 
-						// koers stijging
-						if (SIGNAAL_TELLER == verkoopTeller + 1) {
-							Console.Write (VERKOOP_STR);
-						} else {
-							aankoopTeller = 0;
-							++verkoopTeller;
-						}
-					} else {
-						// status quo (reset tellers)
-						verkoopTeller = aankoopTeller = 0;
-					}
-					w = new KoersWaarde (k);
-					Console.WriteLine ();
-				}
+				kw.Overzicht ();
 				Console.WriteLine ();
 			}
 		}
@@ -468,6 +488,51 @@ namespace beurs_francismeyvis
 
             Console.WriteLine(aandeel1 == beurs1.GetSterksteDagStijger(d4));
             Console.WriteLine(aandeel2 == beurs1.GetSterksteDagDaler(d4));
+
+			Obligatie obligatie1 = new Obligatie ("C");
+			obligatie1.VoegToe (new Koers (10, 100, d1));
+			beurs1.VoegToe (obligatie1);
+			Console.WriteLine(obligatie1 == beurs1.GetSterksteDagStijger(d1));
+
+			List<Aandeel> list = new List<Aandeel> ();
+			list.Add (aandeel1);
+			list.Add (aandeel2);
+			list.Add (aandeel2);
+
+			Action<bool> cwlb = Console.WriteLine;
+			Action cwl = Console.WriteLine;
+			cwlb (3 == list.Count);
+
+			foreach (Aandeel a in list) {
+				a.Overzicht ();
+				cwl ();
+			}
+
+
+			/************ Tests op Util.Extreem ****************/
+
+			int?[] ints = new int?[10];
+			Tuple<int, int?> resultaat;
+
+			resultaat = Util.Extreem<int>.Zoek (ints, delegate(int a, int b) {
+				return a > b;
+			});
+			cwlb (-1 == resultaat.Item1);
+			cwlb (!resultaat.Item2.HasValue);
+
+			ints [2] = 5;
+			resultaat = Util.Extreem<int>.Zoek (ints, delegate(int a, int b) {
+				return a > b;
+			});
+			cwlb (2 == resultaat.Item1);
+			cwlb (resultaat.Item2.HasValue);
+
+			ints [7] = 10;
+			resultaat = Util.Extreem<int>.Zoek (ints, delegate(int a, int b) {
+				return a > b;
+			});
+			cwlb (7 == resultaat.Item1);
+			cwlb (10 == resultaat.Item2.Value);
 		}
 	}
 }
