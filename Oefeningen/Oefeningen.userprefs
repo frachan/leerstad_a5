@@ -1,6 +1,10 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Release|x86" />
-  <MonoDevelop.Ide.Workbench />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Bib/francismeyvis_oef6_bibliotheek.cs">
+    <Files>
+      <File FileName="Bib/francismeyvis_oef6_bibliotheek.cs" Line="32" Column="21" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>

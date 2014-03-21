@@ -1,3 +1,8 @@
 *.exe
 *.exe.mdb
 /.gitignore~
+*.pdb
+*.cache
+*.suo
+AssemblyInfo.cs
+*.manifest
