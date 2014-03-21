@@ -4,17 +4,25 @@
  * Implementatie van oefening 6
  * 
  * Bib stuff
+ * Deze oefening heb ik pas later gemaakt; ze bevat technieken die op dat moment niet gezien zijn.
+ * Er is niet veel commentaar. Alles spreekt eigenlijk voor zich na 't lezen van de opgave.
+ * De class Boek bevat niets omtrend uitlenen; vind dat verkeer in de opgave
+ * Voor een uitgeleend boek is er een aparte class GeleendBoek
  */
 
 using System;
 
 namespace Bib_francismeyvis
 {
-	/// Generic tool voor collecties van de leden en boeken
+	/// Generic module tool voor operaties op gesorteerde collecties van de bib's leden en boeken
+	/// T moet de IComparable<T> interface implementeren voor correcte werking.
 	class Tool<T> {
+		/// Geeft de index indien item voorkomt in array
 		public static int Zoek(T[] array, T item) {
 			return Array.BinarySearch(array, item);
 		}
+
+		/// Geeft true als het _nieuwe_ item in de array is toegevoegd
 		public static bool VoegToe(ref T[] array, T item) {
 			if (0 > Zoek (array, item)) {
 				Array.Resize (ref array, array.Length + 1);
@@ -25,6 +33,8 @@ namespace Bib_francismeyvis
 				return false;
 			}
 		}
+
+		/// Geeft true als het item uit de array is verwijderd
 		public static bool Verwijder(ref T[] array, T item) {
 			int index = Zoek (array, item);
 			if (0 <= index) {
@@ -35,12 +45,25 @@ namespace Bib_francismeyvis
 				return false;
 			}
 		}
+
+		/// Display de items in array
 		public static void Toon(T[] array) {
 			foreach (T i in array) {
 				Console.WriteLine ("  " + i);
 			}
 		}
-	}
+	} // Module Tool
+
+
+	/// Instance die unieke nummers genereert (voor boeken & leden)
+	class Teller {
+		private int _Waarde;
+		public int Waarde { get { return _Waarde++;} }
+
+		public Teller(int defaultStart = 1) {
+			_Waarde = defaultStart;
+		}
+	} // class Teller
 
 
 	class Adres {
@@ -60,17 +83,6 @@ namespace Bib_francismeyvis
 			return Straat + " " + Nummer + ", " + Postcode + " " + Gemeente;
 		}
 	} // class adres
-
-
-	/// Instance die unieke nummers genereert
-	class Teller {
-		private int _Waarde;
-		public int Waarde { get { return _Waarde++;} }
-
-		public Teller(int defaultStart = 1) {
-			_Waarde = defaultStart;
-		}
-	} // class Teller
 
 
 	class Persoon {
@@ -256,6 +268,7 @@ namespace Bib_francismeyvis
 
 	class MainClass
 	{
+		/// Helper voor efficienter testen en minder typen
 		class C {
 			private static int cnt = 0; 
 			public static void WL<T> (T d) { Console.WriteLine("" + ++cnt + ": " + d);}
