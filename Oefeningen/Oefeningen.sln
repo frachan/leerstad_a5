@@ -51,6 +51,6 @@ Global
 		{FE328144-41E6-473D-BCED-457BD9F847D0}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = School\School.csproj
+		StartupItem = beurs\beurs.csproj
 	EndGlobalSection
 EndGlobal

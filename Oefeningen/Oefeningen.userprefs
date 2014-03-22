@@ -1,8 +1,9 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Release|x86" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Bib/francismeyvis_oef6_bibliotheek.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="beurs/francismeyvis_oef8_beurs.cs">
     <Files>
-      <File FileName="Bib/francismeyvis_oef6_bibliotheek.cs" Line="32" Column="21" />
+      <File FileName="Bib/francismeyvis_oef6_bibliotheek.cs" Line="34" Column="14" />
+      <File FileName="beurs/francismeyvis_oef8_beurs.cs" Line="33" Column="19" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
