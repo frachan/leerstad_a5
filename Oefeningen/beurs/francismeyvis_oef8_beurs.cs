@@ -235,16 +235,16 @@ namespace beurs_francismeyvis
     } // class Obligatie
 
 
-    class Beurs<T> : IEnumerable<KoersWijziging>
-    where T : KoersWijziging
+	class Beurs<T> : IEnumerable<T> 
+		where T : KoersWijziging
     {
         private const int WEEK_TELLER = 5;
 
         /// Aandelen & obligaties in dit beurs object
-        private KoersWijziging[] _KoersWijziging = new KoersWijziging[0];
+		private T[] _KoersWijziging = new T[0];
 
         /// Voeg een _nieuw_ aandeel of obligatie toe aan dit beurs object
-        public void VoegToe(KoersWijziging koersenWijziging) {
+		public void VoegToe(T koersenWijziging) {
             if (0 > Array.BinarySearch (_KoersWijziging, koersenWijziging)) {
                 // Enkel toevoegen indien het aandeel nog niet aanwezig is
                 Array.Resize (ref _KoersWijziging, _KoersWijziging.Length + 1);
@@ -254,8 +254,8 @@ namespace beurs_francismeyvis
         }
 
         /// Implementatie van IEnumerable voor support van foreach(Beurs)
-        public IEnumerator<KoersWijziging> GetEnumerator() {
-            return ((IEnumerable<KoersWijziging>)this._KoersWijziging).GetEnumerator();
+		public IEnumerator<T> GetEnumerator() {
+			return ((IEnumerable<T>)this._KoersWijziging).GetEnumerator();
         }
         IEnumerator IEnumerable.GetEnumerator() {
             return this.GetEnumerator();
@@ -265,7 +265,7 @@ namespace beurs_francismeyvis
         private double?[] GetVerschillen(DateTime dag, int aantalDagen = 1) {
             double?[] verschillen = new double?[_KoersWijziging.Length];
             int index = 0;
-            foreach (KoersWijziging kw in _KoersWijziging) {
+			foreach (T kw in _KoersWijziging) {
                 double? verschil = null;
                 IEnumerator<Koers> enumerator = kw.GetEnumerator(dag, aantalDagen);
                 while (enumerator.MoveNext()) {
@@ -281,7 +281,7 @@ namespace beurs_francismeyvis
         }
 
         /// Zoek de koerswijziging die het sterkst stijgt op de gegeven dag
-        public KoersWijziging GetSterksteDagStijger(DateTime dag) {
+		public T GetSterksteDagStijger(DateTime dag) {
             double?[] verschillen = GetVerschillen(dag);
             Tuple<int, double?> result = Util.Extreem<double>.Zoek(
                 verschillen, delegate(double a, double b) { return a > b; });
@@ -289,7 +289,7 @@ namespace beurs_francismeyvis
         }
 
         /// Zoek de koerswijziging die het sterkst daalt op de gegeven dag
-        public KoersWijziging GetSterksteDagDaler(DateTime dag) {
+		public T GetSterksteDagDaler(DateTime dag) {
             double?[] verschillen = GetVerschillen(dag);
             Tuple<int, double?> result = Util.Extreem<double>.Zoek(
                 verschillen, delegate(double a, double b) { return a < b; });
@@ -297,7 +297,7 @@ namespace beurs_francismeyvis
         }
 
         /// Zoek de koerswijziging die het sterkst stijgt over 5 dagen vanaf de gegeven dag
-        public KoersWijziging GetSterksteWeekStijger(DateTime dag) {
+		public T GetSterksteWeekStijger(DateTime dag) {
             double?[] verschillen = GetVerschillen(dag, WEEK_TELLER);
             Tuple<int, double?> result = Util.Extreem<double>.Zoek(
                 verschillen, delegate(double a, double b) { return a > b; });
@@ -305,7 +305,7 @@ namespace beurs_francismeyvis
         }
 
         /// Zoek de koerswijziging die het sterkst daalt over 5 dagen vanaf de gegeven dag
-        public KoersWijziging GetSterksteWeekDaler(DateTime dag) {
+		public T GetSterksteWeekDaler(DateTime dag) {
             double?[] verschillen = GetVerschillen(dag, WEEK_TELLER);
             Tuple<int, double?> result = Util.Extreem<double>.Zoek(
                 verschillen, delegate(double a, double b) { return a < b; });
@@ -314,7 +314,7 @@ namespace beurs_francismeyvis
 
         /// Geeft een overzicht van alles in Beurs, inclusief aankoop/verkoop signalen
         public void Overzicht() {
-            foreach (KoersWijziging kw in _KoersWijziging) {
+			foreach (T kw in _KoersWijziging) {
                 kw.Overzicht ();
                 Console.WriteLine ();
             }
@@ -490,8 +490,13 @@ namespace beurs_francismeyvis
 
             Obligatie obligatie1 = new Obligatie ("C");
             obligatie1.VoegToe (new Koers (10, 100, d1));
-            beurs1.VoegToe (obligatie1);
-            Console.WriteLine(obligatie1 == beurs1.GetSterksteDagStijger(d1));
+			// Would give an error since beurs1's type is Beurs<Aandeel>. 
+			// Obligatie is not Aandeel; catched since making Beurs truely generic.
+			// Since changing Beurs.VoegToe(KoersWijziging koersenWijziging) to Beurs.VoegToe(T koersenWijziging)  
+			//beurs1.VoegToe (obligatie1);
+			//Console.WriteLine(obligatie1 == beurs1.GetSterksteDagStijger(d1));
+			// Of course could beurs1 declare as Beurs<KoersWijziging> rather than Beurs<Aandeel>
+			// That seems more logical; a beurs contains multiple types of KoersWijziging collections ...
 
             List<Aandeel> list = new List<Aandeel> ();
             list.Add (aandeel1);

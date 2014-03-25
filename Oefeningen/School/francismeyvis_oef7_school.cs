@@ -125,7 +125,7 @@ namespace School_francismeyvis
     class MainClass
     {
         /// Helper voor efficienter testen en minder typen
-        class C {
+		static class C {
             private static int cnt = 0;
             public static void WL<T> (T d) { Console.WriteLine("" + ++cnt + ": " + d);}
             public static void W<T> (T d) { Console.Write(d);}
