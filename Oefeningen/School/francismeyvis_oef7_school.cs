@@ -7,13 +7,24 @@ using System.Collections;
 
 namespace School_francismeyvis
 {
+	static class Util<T> where T : class {
+		public static T Convert(Object o) {
+			T t = o as T;
+			if (null == t) {
+				throw new InvalidCastException ("Object param a is not of Student class");
+			}
+			return t;
+		}
+	} // class Util
+
+
     class Student : IComparable {
         public readonly string Naam;
         public readonly string Voornaam;
         public readonly int    Leeftijd;
 
         public int CompareTo(Object that) {
-            return this.Leeftijd - Convert(that).Leeftijd;
+			return this.Leeftijd - Util<Student>.Convert(that).Leeftijd;
         }
 
         public Student(string naam, string voornaam, int leeftijd) {
@@ -26,18 +37,10 @@ namespace School_francismeyvis
             return Naam + ", " + Voornaam + " (" + Leeftijd + ")";
         }
 
-        private static Student Convert(Object o) {
-            Student s = o as Student;
-            if (null == s) {
-                throw new InvalidCastException ("Object param a is not of Student class");
-            }
-            return s;
-        }
-
         class NaamComparer : IComparer {
             public int Compare(Object a, Object b) {
-                Student s1 = Convert (a);
-                Student s2 = Convert (b);
+				Student s1 = Util<Student>.Convert (a);
+				Student s2 = Util<Student>.Convert (b);
                 int res = s1.Naam.CompareTo (s2.Naam);
                 if (0 == res) {
                     res = s1.Voornaam.CompareTo (s2.Voornaam);
@@ -59,16 +62,8 @@ namespace School_francismeyvis
         private ArrayList      _Students = new ArrayList();
         public readonly string Naam;
 
-        private static Klas Convert(Object o) {
-            Klas k = o as Klas;
-            if (null == k) {
-                throw new InvalidCastException ("Object is not of Klas class");
-            }
-            return k;
-        }
-
         int IComparable.CompareTo(Object that) {
-            Klas k = Convert (that);
+			Klas k = Util<Klas>.Convert (that);
             return this.Naam.CompareTo(k.Naam);
         }
 
