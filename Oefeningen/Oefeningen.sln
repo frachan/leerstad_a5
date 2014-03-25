@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "School", "School\School.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "try", "try\try.csproj", "{0949EC80-4980-4B96-95F0-0210EC7F8BE6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Driehoek", "Driehoek\Driehoek.csproj", "{A05E18D9-25DF-444D-BD5B-115D52615C0D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -43,6 +45,10 @@ Global
 		{86D2CDF3-32EA-4E09-986B-956DBCF50D7A}.Debug|x86.Build.0 = Debug|x86
 		{86D2CDF3-32EA-4E09-986B-956DBCF50D7A}.Release|x86.ActiveCfg = Release|x86
 		{86D2CDF3-32EA-4E09-986B-956DBCF50D7A}.Release|x86.Build.0 = Release|x86
+		{A05E18D9-25DF-444D-BD5B-115D52615C0D}.Debug|x86.ActiveCfg = Debug|x86
+		{A05E18D9-25DF-444D-BD5B-115D52615C0D}.Debug|x86.Build.0 = Debug|x86
+		{A05E18D9-25DF-444D-BD5B-115D52615C0D}.Release|x86.ActiveCfg = Release|x86
+		{A05E18D9-25DF-444D-BD5B-115D52615C0D}.Release|x86.Build.0 = Release|x86
 		{B4F2CF8B-6E34-45DA-8F1B-9C767D8DD6EA}.Debug|x86.ActiveCfg = Debug|x86
 		{B4F2CF8B-6E34-45DA-8F1B-9C767D8DD6EA}.Debug|x86.Build.0 = Debug|x86
 		{B4F2CF8B-6E34-45DA-8F1B-9C767D8DD6EA}.Release|x86.ActiveCfg = Release|x86
@@ -57,6 +63,6 @@ Global
 		{FE328144-41E6-473D-BCED-457BD9F847D0}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = School\School.csproj
+		StartupItem = Driehoek\Driehoek.csproj
 	EndGlobalSection
 EndGlobal

@@ -1,10 +1,8 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Release|x86" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="try/Program.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Driehoek/Program.cs">
     <Files>
-      <File FileName="Bib/francismeyvis_oef6_bibliotheek.cs" Line="1" Column="1" />
-      <File FileName="beurs/francismeyvis_oef8_beurs.cs" Line="1" Column="1" />
-      <File FileName="try/Program.cs" Line="16" Column="24" />
+      <File FileName="Driehoek/Program.cs" Line="38" Column="4" />
       <File FileName="School/francismeyvis_oef7_school.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
