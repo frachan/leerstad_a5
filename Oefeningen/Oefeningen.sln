@@ -17,6 +17,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "School", "School\School.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Driehoek", "Driehoek\Driehoek.csproj", "{A05E18D9-25DF-444D-BD5B-115D52615C0D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "extra_oef01_oef01", "extra_oef01_oef01\extra_oef01_oef01.csproj", "{57A4E225-044A-45A0-8BFC-2228DFEE4F93}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "extra_oef01_oef02", "extra_oef01_oef02\extra_oef01_oef02.csproj", "{DEA0B155-776E-4CEB-A2E1-03B7260977A8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "extra_oef01_oef03", "extra_oef01_oef03\extra_oef01_oef03.csproj", "{D54BADF5-F58A-4182-B139-5123C90382D2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -31,6 +37,10 @@ Global
 		{44BED17B-5A96-4076-B740-58B6765AD6D5}.Debug|x86.Build.0 = Debug|x86
 		{44BED17B-5A96-4076-B740-58B6765AD6D5}.Release|x86.ActiveCfg = Release|x86
 		{44BED17B-5A96-4076-B740-58B6765AD6D5}.Release|x86.Build.0 = Release|x86
+		{57A4E225-044A-45A0-8BFC-2228DFEE4F93}.Debug|x86.ActiveCfg = Debug|x86
+		{57A4E225-044A-45A0-8BFC-2228DFEE4F93}.Debug|x86.Build.0 = Debug|x86
+		{57A4E225-044A-45A0-8BFC-2228DFEE4F93}.Release|x86.ActiveCfg = Release|x86
+		{57A4E225-044A-45A0-8BFC-2228DFEE4F93}.Release|x86.Build.0 = Release|x86
 		{6E201350-273D-4A5E-86BB-60C8162EE0AA}.Debug|x86.ActiveCfg = Debug|x86
 		{6E201350-273D-4A5E-86BB-60C8162EE0AA}.Debug|x86.Build.0 = Debug|x86
 		{6E201350-273D-4A5E-86BB-60C8162EE0AA}.Release|x86.ActiveCfg = Release|x86
@@ -47,6 +57,14 @@ Global
 		{B4F2CF8B-6E34-45DA-8F1B-9C767D8DD6EA}.Debug|x86.Build.0 = Debug|x86
 		{B4F2CF8B-6E34-45DA-8F1B-9C767D8DD6EA}.Release|x86.ActiveCfg = Release|x86
 		{B4F2CF8B-6E34-45DA-8F1B-9C767D8DD6EA}.Release|x86.Build.0 = Release|x86
+		{D54BADF5-F58A-4182-B139-5123C90382D2}.Debug|x86.ActiveCfg = Debug|x86
+		{D54BADF5-F58A-4182-B139-5123C90382D2}.Debug|x86.Build.0 = Debug|x86
+		{D54BADF5-F58A-4182-B139-5123C90382D2}.Release|x86.ActiveCfg = Release|x86
+		{D54BADF5-F58A-4182-B139-5123C90382D2}.Release|x86.Build.0 = Release|x86
+		{DEA0B155-776E-4CEB-A2E1-03B7260977A8}.Debug|x86.ActiveCfg = Debug|x86
+		{DEA0B155-776E-4CEB-A2E1-03B7260977A8}.Debug|x86.Build.0 = Debug|x86
+		{DEA0B155-776E-4CEB-A2E1-03B7260977A8}.Release|x86.ActiveCfg = Release|x86
+		{DEA0B155-776E-4CEB-A2E1-03B7260977A8}.Release|x86.Build.0 = Release|x86
 		{F07ECB96-914A-4BF0-8B94-5C35E91189ED}.Debug|x86.ActiveCfg = Debug|x86
 		{F07ECB96-914A-4BF0-8B94-5C35E91189ED}.Debug|x86.Build.0 = Debug|x86
 		{F07ECB96-914A-4BF0-8B94-5C35E91189ED}.Release|x86.ActiveCfg = Release|x86
@@ -57,6 +75,6 @@ Global
 		{FE328144-41E6-473D-BCED-457BD9F847D0}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = Week02\Week02.csproj
+		StartupItem = extra_oef01_oef03\extra_oef01_oef03.csproj
 	EndGlobalSection
 EndGlobal

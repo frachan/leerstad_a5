@@ -5,3 +5,6 @@
 *.cache
 *.suo
 *.manifest
+*.AssemblyAttribute.cs
+*.FilesWrittenAbsolute.txt
+*.FileListAbsolute.txt
